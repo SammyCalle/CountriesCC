@@ -1,5 +1,6 @@
 package com.sammy.countriescc.presentation.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,10 +22,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,7 +38,8 @@ import com.sammy.countriescc.ui.theme.CountriesCCTheme
 fun SearchScreen(
     query: String,
     uiState: SearchScreenUiState,
-    onQueryChange: (String) -> Unit
+    onQueryChange: (String) -> Unit,
+    onCountryClick: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -59,7 +63,13 @@ fun SearchScreen(
                 }
             },
             singleLine = true,
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedPlaceholderColor = Color.Gray,
+                unfocusedPlaceholderColor = Color.Gray
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -70,11 +80,13 @@ fun SearchScreen(
                     CircularProgressIndicator()
                 }
             }
+
             is SearchScreenUiState.Error -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(uiState.message)
                 }
             }
+
             is SearchScreenUiState.Success -> {
                 if (uiState.countries.isEmpty()) {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -83,7 +95,7 @@ fun SearchScreen(
                 } else {
                     LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         items(uiState.countries, key = { it.code }) { country ->
-                            CountryItem(country)
+                            CountryItem(country, onCountryClick = onCountryClick)
                         }
                     }
                 }
@@ -91,17 +103,24 @@ fun SearchScreen(
         }
     }
 }
+
 @Composable
-fun CountryItem(country: CountrySummary) {
+fun CountryItem(
+    country: CountrySummary,
+    onCountryClick: (String) -> Unit
+) {
     Text(
         text = country.name,
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onCountryClick(country.code) }
             .padding(vertical = 12.dp),
-        style = MaterialTheme.typography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge,
+        color = Color.Black
     )
     HorizontalDivider()
 }
+
 private val sampleCountries = listOf(
     CountrySummary(name = "Peru", code = "PE"),
     CountrySummary(name = "Poland", code = "PL"),
@@ -118,19 +137,25 @@ fun SearchScreenPhonePortraitPreview() {
         SearchScreen(
             query = "P",
             uiState = SearchScreenUiState.Success(sampleCountries),
-            onQueryChange = {}
+            onQueryChange = {},
+            onCountryClick = {}
         )
     }
 }
 
-@Preview(name = "Phone Landscape", showBackground = true, device = "spec:width=914dp,height=411dp,dpi=420")
+@Preview(
+    name = "Phone Landscape",
+    showBackground = true,
+    device = "spec:width=914dp,height=411dp,dpi=420"
+)
 @Composable
 fun SearchScreenPhoneLandscapePreview() {
     CountriesCCTheme {
         SearchScreen(
             query = "P",
             uiState = SearchScreenUiState.Success(sampleCountries),
-            onQueryChange = {}
+            onQueryChange = {},
+            onCountryClick = {}
         )
     }
 }
@@ -142,19 +167,25 @@ fun SearchScreenTabletPortraitPreview() {
         SearchScreen(
             query = "P",
             uiState = SearchScreenUiState.Success(sampleCountries),
-            onQueryChange = {}
+            onQueryChange = {},
+            onCountryClick = {}
         )
     }
 }
 
-@Preview(name = "Tablet Landscape", showBackground = true, device = "spec:width=1280dp,height=800dp,dpi=240")
+@Preview(
+    name = "Tablet Landscape",
+    showBackground = true,
+    device = "spec:width=1280dp,height=800dp,dpi=240"
+)
 @Composable
 fun SearchScreenTabletLandscapePreview() {
     CountriesCCTheme {
         SearchScreen(
             query = "P",
             uiState = SearchScreenUiState.Success(sampleCountries),
-            onQueryChange = {}
+            onQueryChange = {},
+            onCountryClick = {}
         )
     }
 }
@@ -166,7 +197,8 @@ fun SearchScreenLoadingPreview() {
         SearchScreen(
             query = "",
             uiState = SearchScreenUiState.Loading,
-            onQueryChange = {}
+            onQueryChange = {},
+            onCountryClick = {}
         )
     }
 }
@@ -178,7 +210,8 @@ fun SearchScreenErrorPreview() {
         SearchScreen(
             query = "",
             uiState = SearchScreenUiState.Error("Something went wrong"),
-            onQueryChange = {}
+            onQueryChange = {},
+            onCountryClick = {}
         )
     }
 }
@@ -190,7 +223,8 @@ fun SearchScreenEmptyPreview() {
         SearchScreen(
             query = "xyz",
             uiState = SearchScreenUiState.Success(emptyList()),
-            onQueryChange = {}
+            onQueryChange = {},
+            onCountryClick = {}
         )
     }
 }

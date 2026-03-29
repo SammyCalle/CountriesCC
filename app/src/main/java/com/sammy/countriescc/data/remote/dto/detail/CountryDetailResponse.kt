@@ -7,8 +7,8 @@ data class CountryDetailResponse(
     val flags: CountryFlag,
     val coatOfArms: CountryCoatOfArms,
     val name: NameDetails,
-    val currencies: CountryCurrency,
-    val languages: Map<String, CountryLanguage>,
+    val currencies: Map<String, CountryCurrency>,
+    val languages: Map<String, String>,
     val capital: List<String>,
     val maps: CountryMap,
     val population: Int,
@@ -19,10 +19,6 @@ data class CountryDetailResponse(
 data class CountryCurrency(
     val name: String,
     val symbol: String
-)
-
-data class CountryLanguage(
-    val name: String
 )
 
 data class CountryMap(

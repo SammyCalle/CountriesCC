@@ -2,6 +2,7 @@ package com.sammy.countriescc.di
 
 import com.sammy.countriescc.domain.repository.CountriesRepository
 import com.sammy.countriescc.domain.usecase.GetCountriesUseCase
+import com.sammy.countriescc.domain.usecase.GetCountryDetailUseCase
 import com.sammy.countriescc.domain.usecase.SyncCountriesUseCase
 import dagger.Module
 import dagger.Provides
@@ -25,4 +26,9 @@ object DomainModule {
         return SyncCountriesUseCase(repository)
     }
 
+    @Provides
+    @Singleton
+    fun provideGetCountryDetailUseCase(repository: CountriesRepository): GetCountryDetailUseCase {
+        return GetCountryDetailUseCase(repository)
+    }
 }

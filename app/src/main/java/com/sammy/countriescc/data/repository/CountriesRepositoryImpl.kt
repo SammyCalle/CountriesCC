@@ -19,7 +19,7 @@ class CountriesRepositoryImpl @Inject constructor(
 
     override suspend fun syncIfNeeded() {
         if (countriesDao.count() == 0) {
-            val entities = countriesApi.getListOfCountriesNames().countries.map { country ->
+            val entities = countriesApi.getListOfCountriesNames().map { country ->
                 country.toEntity()
             }
             countriesDao.insertAll(entities)
@@ -29,12 +29,13 @@ class CountriesRepositoryImpl @Inject constructor(
     override fun getListOfCountriesNames(query: String): Flow<List<CountrySummary>> {
         val flow = if (query.isBlank()) countriesDao.getAllCountries()
         else countriesDao.searchCountries(query)
-
         return flow.map { entities -> entities.map { it.toDomain() } }
     }
 
     override suspend fun getCountryByCode(code: String): CountryDetail {
-        TODO("Not yet implemented")
+        countriesApi.getCountryByCode(code).also { response ->
+            return response.toDomain()
+        }
     }
 
 }
