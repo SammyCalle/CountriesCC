@@ -3,6 +3,7 @@ package com.sammy.countriescc.data.mapper
 import com.sammy.countriescc.data.local.entities.CountriesEntity
 import com.sammy.countriescc.data.remote.dto.detail.CountryDetailResponse
 import com.sammy.countriescc.data.remote.dto.list.Country
+import com.sammy.countriescc.data.remote.dto.list.CountryList
 import com.sammy.countriescc.domain.model.CountryDetail
 import com.sammy.countriescc.domain.model.CountrySummary
 import kotlin.collections.map
@@ -14,8 +15,8 @@ fun Country.toEntity() : CountriesEntity {
     )
 }
 
-fun List<Country>.toEntity() : List<CountriesEntity> {
-    return map { country -> country.toEntity() }
+fun CountryList.toEntity() : List<CountriesEntity> {
+    return countries.map { country -> country.toEntity() }
 }
 
 fun List<CountriesEntity>.toDomain() : List<CountrySummary> {

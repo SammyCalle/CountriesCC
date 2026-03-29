@@ -6,6 +6,7 @@ import com.sammy.countriescc.domain.model.CountrySummary
 import kotlinx.coroutines.flow.Flow
 
 interface CountriesRepository {
-    suspend fun getListOfCountriesNames() : Flow<PagingData<CountrySummary>>
+    suspend fun syncIfNeeded()
+    fun getListOfCountriesNames(query: String): Flow<List<CountrySummary>>
     suspend fun getCountryByCode(code: String) : CountryDetail
 }
