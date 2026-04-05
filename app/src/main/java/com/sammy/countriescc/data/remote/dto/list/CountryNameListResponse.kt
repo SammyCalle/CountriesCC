@@ -1,6 +1,6 @@
 package com.sammy.countriescc.data.remote.dto.list
 
-data class Country(
+data class CountryDto(
     val name: NameDetails,
     val cca3 : String
 )

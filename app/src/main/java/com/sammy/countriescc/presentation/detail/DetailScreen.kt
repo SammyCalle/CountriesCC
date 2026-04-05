@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +47,7 @@ fun DetailScreen(
     when (uiState) {
         is DetailScreenUiState.Loading -> {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(modifier = Modifier.testTag("LoadingIndicator"))
             }
         }
 
@@ -78,7 +79,7 @@ private fun DetailContent(country: CountryDetail, onBackClick: () -> Unit) {
         item {
             IconButton(
                 onClick = onBackClick,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp).testTag("BackIcon")
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

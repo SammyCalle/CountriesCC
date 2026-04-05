@@ -16,7 +16,6 @@ class CountriesRepositoryImpl @Inject constructor(
     private val countriesDao: CountriesDao
 ) : CountriesRepository {
 
-
     override suspend fun syncIfNeeded() {
         if (countriesDao.count() == 0) {
             val entities = countriesApi.getListOfCountriesNames().map { country ->
